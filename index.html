@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Sheet ID Extractor</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+}
+
+.container {
+  width: 420px;
+  padding: 30px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  background: #00c6ff;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+.result {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  word-break: break-all;
+}
+
+.success {
+  background: rgba(0,255,150,0.15);
+}
+
+.error {
+  background: rgba(255,0,80,0.15);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Sheet ID Extractor</h1>
+
+  <input 
+    type="text"
+    id="sheetUrl"
+    placeholder="Paste Google Sheets URL here"
+  />
+
+  <button onclick="extractSheetId()">Extract Sheet ID</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+/*
+Google Sheets URL format typically:
+https://docs.google.com/spreadsheets/d/SHEET_ID/edit
+
+Regex logic:
+- Look for /spreadsheets/d/
+- Capture everything until next /
+*/
+
+function extractSheetId() {
+  const url = document.getElementById("sheetUrl").value.trim();
+  const resultBox = document.getElementById("result");
+
+  // Regex for Google Sheets ID extraction
+  const regex = /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/;
+
+  const match = url.match(regex);
+
+  if (match && match[1]) {
+    resultBox.className = "result success";
+    resultBox.innerHTML = `
+      <strong>Sheet ID:</strong><br>
+      ${match[1]}
+    `;
+  } else {
+    resultBox.className = "result error";
+    resultBox.innerHTML = "Invalid Google Sheets URL ❌";
+  }
+}
+</script>
+
+</body>
+</html>
